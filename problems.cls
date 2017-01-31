@@ -1,12 +1,14 @@
 %chktex-file 1
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{problems}[2017/01/31 v1.0 Jake's problem sheet layout] %chktex 8
-\LoadClass[twocolumn]{article}
+\LoadClass{article}
 
 \RequirePackage[a4paper, top=20mm, left=20mm, right=20mm, bottom=20mm]{geometry}
 \RequirePackage{color, amsmath, mathtools, braket}
-\RequirePackage{titlesec}
-\RequirePackage{hyperref, cleveref}
+\RequirePackage[explicit]{titlesec}
+\RequirePackage{doi, hyperref}
+\RequirePackage[super, sort&compress]{natbib}
+\RequirePackage{cleveref}
 
 \newcommand{\ie}{\textit{i.e.}}
 \newcommand{\eg}{\textit{e.g.}}
@@ -52,8 +54,8 @@
 % Define the styling of the sections (question numbers).
 \titleformat{\section}
  {\cleaders\vbox to 0.5\baselineskip{\titlerule[1pt]}\vskip0.5\baselineskip}
- {\large\textbf{\thesection}}
- {0em}{}
+ {\large\bf \thesection}
+ {1em}{\large\bf #1}
 \titlespacing{\section}{0pt}{15pt plus 3pt minus 3pt}{2pt}
 
 % A manual subsection separator, for when we have some text before the first
@@ -100,3 +102,5 @@
   \end{center}%
   \par%
   \vskip 0.5em}
+
+\bibliographystyle{apsrev4-1} %chktex 8
