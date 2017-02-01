@@ -11,6 +11,9 @@
 \RequirePackage[a4paper, top=20mm, left=20mm, right=20mm, bottom=20mm]{geometry}
 \RequirePackage{doi,cleveref}
 
+% Set the citation separator to be a comma, not a semicolon.
+\setcitestyle{comma}
+
 % i.e. and e.g. commands. Use as `\ie\ in other words`---with the slash after,
 % or you'll get funny spacing.
 \newcommand{\ie}{\textit{i.e.}}
