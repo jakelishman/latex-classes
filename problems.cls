@@ -1,15 +1,18 @@
 %chktex-file 1
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{problems}[2017/01/31 v1.0 Jake's problem sheet layout] %chktex 8
+\ProvidesClass{problems}[2017/02/01 v1.0 Jake's problem sheet layout] %chktex 8
 \LoadClass{article}
 
-\RequirePackage[a4paper, top=20mm, left=20mm, right=20mm, bottom=20mm]{geometry}
-\RequirePackage{color, amsmath, mathtools, braket}
+\RequirePackage{color, amsmath, mathtools, braket, multicol}
 \RequirePackage[explicit]{titlesec}
-\RequirePackage{doi, hyperref}
 \RequirePackage[super, sort&compress]{natbib}
-\RequirePackage{cleveref}
+\RequirePackage[colorlinks=true,citecolor=magenta,linkcolor=magenta]{hyperref}
+% Packages below this line _must_ be loaded after hyperref.
+\RequirePackage[a4paper, top=20mm, left=20mm, right=20mm, bottom=20mm]{geometry}
+\RequirePackage{doi,cleveref}
 
+% i.e. and e.g. commands. Use as `\ie\ in other words`---with the slash after,
+% or you'll get funny spacing.
 \newcommand{\ie}{\textit{i.e.}}
 \newcommand{\eg}{\textit{e.g.}}
 
@@ -82,6 +85,7 @@
 \crefname{subsection}{part}{parts}
 \Crefname{subsection}{Part}{Parts}
 
+% Add lecturer and problem sheet number commands that maketitle can access.
 \let\@lecturer\@empty
 \let\@sheetnum\@empty
 \newcommand{\lecturer}[1]{\gdef\@lecturer{#1}}
@@ -103,4 +107,11 @@
   \par%
   \vskip 0.5em}
 
+% Set up the bibliography.
 \bibliographystyle{apsrev4-1} %chktex 8
+\renewcommand\bibsection{}
+\let\old@bibliography\bibliography
+\renewcommand\bibliography[1]{
+\begin{multicols}{2}[\noindent\rule{\textwidth}{1pt}]
+    \old@bibliography{#1}
+\end{multicols}}
