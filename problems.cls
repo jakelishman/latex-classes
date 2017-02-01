@@ -11,6 +11,21 @@
 \RequirePackage[a4paper, top=20mm, left=20mm, right=20mm, bottom=20mm]{geometry}
 \RequirePackage{doi,cleveref}
 
+% Set up the formatting for parts and subparts of questions.
+% - romanalph (default) -> 1i.a
+% - alphroman           -> 1a.i
+\newcommand{\formatpart}{\roman}
+\newcommand{\formatsubpart}{\alph}
+\DeclareOption{alphroman}{
+    \renewcommand\formatpart\alph
+    \renewcommand\formatsubpart\roman
+}
+\DeclareOption{romanalph}{
+    \renewcommand\formatpart\roman
+    \renewcommand\formatsubpart\alph
+}
+\ProcessOptions\relax
+
 % Set the citation separator to be a comma, not a semicolon.
 \setcitestyle{comma}
 
@@ -71,15 +86,24 @@
 \newcommand{\qsepinternal}{\centerline{\hss\rule{0.5\linewidth}{0.4pt}\hss}}
 \newcommand{\qsep}{\qsepinternal\vspace{\subsectionspacing}}
 
-% Define the subsection (question parts) to be inline in the text, blue and in
-% roman numerals.
-\renewcommand{\thesubsection}{(\thesection\textit{\roman{subsection}})}
-\newcommand{\titlesubsection}{\textcolor{blue}{(\textit{\roman{subsection}})}}
+% Define the subsection (question parts) to be inline in the text and blue.
+\renewcommand{\thesubsection}{(\thesection\textit{\formatpart{subsection}})}
+\newcommand{\titlesubsection}{\textcolor{blue}{(\textit{\formatpart{subsection}})}}
 \titleformat{\subsection}[runin]
   {\ifnumequal{\value{subsection}}{1}{}{\qsepinternal}}
   {\titlesubsection}
   {0em}{}
 \titlespacing{\subsection}{0pt}{0pt}{0.6em}
+
+% Define the subparts formatting.
+\renewcommand{\thesubsubsection}{(\thesection\textit{\formatpart{subsection}.\formatsubpart{subsubsection}})}
+\newcommand{\titlesubsubsection}{\textcolor{blue}{(\textit{\formatsubpart{subsubsection}})}}
+\renewcommand{\subsubsection}{\refstepcounter{subsubsection}\titlesubsubsection}
+
+% Alias more meaningful names to the sectioning commands.
+\newcommand\question{\section{}}
+\renewcommand\part{\subsection{}}
+\newcommand\subpart{\subsubsection{}}
 
 % Redefine the cleveref names for subsections to reference question parts
 % instead.
