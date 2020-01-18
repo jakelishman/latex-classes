@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{jakecommands}[2019/06/14 v1.0 Jake's custom commands]
 
-\RequirePackage{tikz, siunitx, bm, braket, enumitem}
+\RequirePackage{bm, braket}
 \RequirePackage{amsmath, amssymb, amsfonts, mathtools, empheq, calc, dsfont}
 
 \newcommand*\op[1]{\hat{#1}}
@@ -26,15 +26,23 @@
 \newcommand*\defeq\coloneqq
 
 \renewcommand*\epsilon\varepsilon
-\renewcommand*\Omega\varOmega
+% Use the italic forms of capital Greek letters.
+\renewcommand*\Gamma\varGamma
+\renewcommand*\Delta\varDelta
+\renewcommand*\Theta\varTheta
+\renewcommand*\Lambda\varLambda
+\renewcommand*\Xi\varXi
+\renewcommand*\Pi\varPi
+\renewcommand*\Sigma\varSigma
+\renewcommand*\Upsilon\varUpsilon
 \renewcommand*\Phi\varPhi
+\renewcommand*\Psi\varPsi
+\renewcommand*\Omega\varOmega
 
 \renewcommand*\vec\bm
 
+\newcommand*\acronym[1]{\textsc{\MakeLowercase{#1}}}
 \renewcommand*\th{\textsuperscript{th}}
-
-\newcommand*\bigsl[1]{\mathopen{}\raisebox{-0.15ex}{$\textstyle #1$}\;\!\!}
-\newcommand*\bigsr[1]{\!\mathclose{}\raisebox{-0.15ex}{$\textstyle #1$}}
 
 \newlength\projspace
 \settowidth\projspace{$\!\!$}
@@ -50,6 +58,9 @@
 \newcommand*\sx{\op\sigma_x}
 \newcommand*\sy{\op\sigma_y}
 \newcommand*\sz{\op\sigma_z}
+\newcommand*\Sx{\op{\mathcal S}_x}
+\newcommand*\Sy{\op{\mathcal S}_y}
+\newcommand*\Sz{\op{\mathcal S}_z}
 \renewcommand*\sp{\op\sigma_+}
 \newcommand*\sm{\op\sigma_-}
 \newcommand*\spm{\op\sigma_\pm}
@@ -59,29 +70,61 @@
 
 \newcommand*\ie{\textit{i.e.\/}}
 \newcommand*\eg{\textit{e.g.\/}}
+\newcommand*\etal{\textit{et al.}}
 \newcommand*\cc{\mathrm{c.c.}}
 \newcommand*\hc{\mathrm{h.c.}}
 
 \newcommand*\reals{\mathbb{R}}
 \newcommand*\integers{\mathbb{Z}}
+\newcommand*\naturals{\mathbb{N}}
 \newcommand*\nonnegints{\integers^*}
 \newcommand*\complexes{\mathbb{C}}
 
+% Meta-command to declare a new command with magically growing delimiters after
+% an optional starter.  The resulting command then takes an optional size
+% argument which can override the size of the delimiters (use \relax to force
+% the smallest size).
+%
+% Examples:
+%   \DeclareGrowingBrackets\expect\langle\rangle
+%       \expect{x}
+%       \expect[\big]{x(1-x)}
+%   \DeclareGrowingBrackets[\op{\mathcal D}]\displace()
+%       \displace\alpha
+%       \displace[\relax]{\hat O}
 \newcommand*\DeclareGrowingBrackets[4][\relax]{%
     \newcommand*#2[2][\FAKETOKEN]{{%
         #1\mathopen{}\ifx##1\FAKETOKEN\left#3\else##1#3\fi%
             {##2}%
-        \mathclose{}\ifx##1\FAKETOKEN\right#4\else##1#4\fi}}}
-\DeclareGrowingBrackets\abs||
+        \ifx##1\FAKETOKEN\right#4\else##1#4\fi\mathclose{}}}}
+\DeclareGrowingBrackets\abs\lvert\rvert
 \DeclareGrowingBrackets\expect\langle\rangle
 \DeclareGrowingBrackets[\mathcal O]\order()
 \DeclareGrowingBrackets[\op{\mathcal D}]\displace()
-\DeclareGrowingBrackets[\op{\mathcal D}_k]\displacek()
 \DeclareGrowingBrackets\norm\lVert\rVert
 
+% Create a load of new operators in maths mode (think 'cos' or 'sin').  The
+% TeX commands \Re and \Im (typically) produce Fraktur symbols which look pretty
+% ugly, so I define them here.
+\DeclareMathOperator\Binomial{B}
+\DeclareMathOperator\Normal{N}
+\DeclareMathOperator\Cov{Cov}
+\DeclareMathOperator\Var{Var}
+\DeclareMathOperator\degree{deg}
+\DeclareMathOperator*\argmin{arg\,min}
+\DeclareMathOperator*\argmax{arg\,max}
+\DeclareMathOperator\erfc{erfc}
+\DeclareMathOperator\erf{erf}
+\DeclareMathOperator\tr{Tr}
+\let\Re\undefined
+\let\Im\undefined
+\DeclareMathOperator\Re{Re}
+\DeclareMathOperator\Im{Im}
 \DeclareMathOperator\re{Re}
 \DeclareMathOperator\im{Im}
 
+% Create a commutator.  The first argument is optional and is a size modifier
+% (or \relax to force the smallest size) to override the size of the delimiters.
 \newcommand*\comm[3][\FAKETOKEN]{{%
     \mathopen{}\ifx#1\FAKETOKEN\left[\else#1[\fi%
         {{#2},\,{#3}}%
@@ -93,3 +136,18 @@
 
 \newlength\incspc
 \setlength\incspc{0.5\baselineskip}
+
+% Hacky way to make a \bigl and \bigr pair when in script-mode without making
+% them huge.
+\newcommand*\bigsl[1]{\mathopen{}\raisebox{-0.15ex}{$\textstyle #1$}\;\!\!}
+\newcommand*\bigsr[1]{\!\mathclose{}\raisebox{-0.15ex}{$\textstyle #1$}}
+
+\newcommand*\TopStrut{\rule{0pt}{2.5ex}}
+\newcommand*\BottomStrut{\rule[-1ex]{0pt}{0pt}}
+\newcommand*\BothStrut{\rule[-1ex]{0pt}{3.2ex}}
+
+% Define the first argument to be a new length (if necessary), and then set its
+% length to the value of the second argument.
+\newcommand*\ForceSetLength[2]{\ifx#1\undefined\newlength#1\fi\setlength#1{#2}}
+
+\newcommand*\todo[1]{{\color{red}\textbf{!! To do !!} #1}}
