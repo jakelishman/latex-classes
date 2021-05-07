@@ -1,0 +1,53 @@
+\usetheme{Boadilla}
+\usefonttheme{palatino}
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{itemize item}{fg=solviolet}
+\setbeamertemplate{enumerate items}[default]
+\setbeamercolor{enumerate item}{fg=solviolet}
+
+\setbeamercolor{alerted text}{fg=solred}
+\setbeamercolor{titlelike}{fg=solmagenta}
+
+\definecolor{solbase2a}{RGB}{232, 223, 205}
+\definecolor{solbase2b}{RGB}{223, 214, 196}
+\definecolor{solbase2c}{RGB}{215, 206, 188}
+\setbeamercolor{author in head/foot}{fg=solbase03, bg=solbase2c}
+\setbeamercolor{title in head/foot}{fg=solbase03, bg=solbase2b}
+\setbeamercolor{date in head/foot}{fg=solbase03, bg=solbase2a}
+
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\addtobeamertemplate{block begin}{}{\centering}
+\addtobeamertemplate{block alerted begin}{}{\centering}
+\addtobeamertemplate{block example begin}{}{\centering}
+\setbeamercolor{block title}{fg=solbase3,bg=solviolet}
+\setbeamercolor{block body}{bg=solbase3}
+
+\setbeamercovered{transparent=0}
+
+\setbeamertemplate{headline}{%
+    \begin{textblock*}{.15\textwidth}(.83\textwidth, 1.4em)
+        {\transparent{0.35}\includegraphics[width=\linewidth]{imperial.eps}}
+    \end{textblock*}
+}
+
+\setbeamersize{text margin left=0.08\paperwidth}
+\setbeamersize{text margin right=0.08\paperwidth}
+
+\newcommand*\fixsingledisplay{\vspace*{-\baselineskip}\setlength\abovedisplayshortskip{.8\baselineskip}\setlength\belowdisplayshortskip{0pt}\setlength\belowdisplayskip{0pt}}
+
+\makeatletter
+\newcommand*\providelength[1]{\@ifundefined{\expandafter\@gobble\string#1}{\newlength{#1}}{}}
+\newcommand*\supplementbegin{%
+    \newcounter{lastframenumber}%
+    \setcounter{lastframenumber}{\value{framenumber}}%
+    \let\old@insertframenumber\insertframenumber%
+    \let\old@inserttotalframenumber\inserttotalframenumber%
+    \renewcommand\insertframenumber\textellipsis%
+    \renewcommand\inserttotalframenumber\textellipsis}
+\newcommand*\supplementend{%
+    \setcounter{framenumber}{\value{lastframenumber}}%
+    \renewcommand\insertframenumber\old@insertframenumber%
+    \renewcommand\inserttotalframenumber\old@inserttotalframenumber}
+\makeatother

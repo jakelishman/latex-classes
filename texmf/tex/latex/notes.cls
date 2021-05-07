@@ -30,15 +30,43 @@
 \makeatletter
 \let\old@title\title
 \renewcommand*\title[1]{\old@title{\vspace*{-3em}#1}}
-\let\old@maketitle\maketitle
-\renewcommand*\maketitle{%
-    \old@maketitle
-
-    {\hypersetup{linkcolor=black}\let\clearpage\relax\tableofcontents}
+\let\old@tableofcontents\tableofcontents
+\renewcommand*\tableofcontents{%
+    {\hypersetup{linkcolor=black}\let\clearpage\relax\old@tableofcontents}
 
     \smallskip
     \begin{center}$\ast\ \ast\ \ast$\end{center}%
 }
 \makeatother
+
+% Create the separator between a float and the body of the text, assuming that
+% the floats will always be floated to the top of the page.
+\newcommand*\afterfloat{\hrulefill}
+
+\newlength\narrowfloatwidth
+\setlength\narrowfloatwidth{95mm}
+\newcommand\narrowfloat[4]{%
+    \begin{#1}[t]%
+        \floatbox[%
+            {\capbeside%
+             \thisfloatsetup{floatwidth=\narrowfloatwidth,%
+                             capbesideposition={left, top},%
+                             capbesidewidth=sidefil,%
+                             capbesidesep=qquad,%
+                             }%
+            }]{#1}[\FBwidth]%
+            {\caption[#3]{\small#4}}%
+            {\footnotesize #2}%
+        \afterfloat%
+    \end{#1}%
+}
+
+\DeclareCaptionFormat{underline}{\small#1#2#3\afterfloat}
+\newcommand\widefloat[4]{%
+    \begin{#1}[t]%
+        \captionsetup{format=underline, singlelinecheck=true}%
+        {\footnotesize #2}{\caption[#3]{#4}}%
+    \end{#1}%
+}
 
 \bibliographystyle{apsrev4-1}
